@@ -1,2 +1,2 @@
 # GMTK-23
-A repo for GMTK game jam!
+Just a collab tool for managing the project with my teammates!! >.<
