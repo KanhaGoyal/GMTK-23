@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Tiles
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: 76f5e96008e70304990ecc27e1e7ad81, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: -4784169518911936731, guid: 76f5e96008e70304990ecc27e1e7ad81, type: 3}
+  - {fileID: -665797221842256803, guid: 76f5e96008e70304990ecc27e1e7ad81, type: 3}
+  - {fileID: 7243693761321457363, guid: 76f5e96008e70304990ecc27e1e7ad81, type: 3}
+  - {fileID: -7029836528724400227, guid: 76f5e96008e70304990ecc27e1e7ad81, type: 3}
+  - {fileID: -8416171102050727611, guid: 76f5e96008e70304990ecc27e1e7ad81, type: 3}
+  - {fileID: 4673998062098960015, guid: 76f5e96008e70304990ecc27e1e7ad81, type: 3}
+  - {fileID: 4256277071540571245, guid: 76f5e96008e70304990ecc27e1e7ad81, type: 3}
+  - {fileID: 8305876789054895890, guid: 76f5e96008e70304990ecc27e1e7ad81, type: 3}
+  - {fileID: 600263109454608872, guid: 76f5e96008e70304990ecc27e1e7ad81, type: 3}
+  - {fileID: -9170021671167474222, guid: 76f5e96008e70304990ecc27e1e7ad81, type: 3}
+  - {fileID: -215318473119579045, guid: 76f5e96008e70304990ecc27e1e7ad81, type: 3}
+  - {fileID: 6353558504674105484, guid: 76f5e96008e70304990ecc27e1e7ad81, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - Tilemap_temp_10
+  - Tilemap_temp_11
+  - Tilemap_temp_9
+  - Tilemap_temp_8
+  - Tilemap_temp_1
+  - Tilemap_temp_0
+  - Tilemap_temp_3
+  - Tilemap_temp_2
+  - Tilemap_temp_5
+  - Tilemap_temp_4
+  - Tilemap_temp_7
+  - Tilemap_temp_6
+  m_RenderDataMap: {}
+  m_Tag: Tiles
+  m_IsVariant: 0
