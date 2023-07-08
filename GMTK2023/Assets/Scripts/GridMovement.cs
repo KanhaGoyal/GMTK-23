@@ -12,16 +12,13 @@ public class GridMovement : MonoBehaviour
     private bool canMoveUp, canMoveDown, canMoveLeft, canMoveRight;
     private Vector2 lastFacedDirection;
     public LayerMask groundLayer;
-
-<<<<<<< Updated upstream
     public GameObject[] addedGhosts;
-=======
+
     NodeGenerator nodeGenerator;
 
     private void Start() {
         nodeGenerator = GetComponent<NodeGenerator>();
     }
->>>>>>> Stashed changes
 
     void Update()
     {
