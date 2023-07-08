@@ -12,6 +12,8 @@ public class GridMovement : MonoBehaviour
     private bool canMoveUp, canMoveDown, canMoveLeft, canMoveRight;
     public LayerMask groundLayer;
 
+    public GameObject[] addedGhosts;
+
     void Update()
     {
         if (Input.GetKey(KeyCode.W) && canMoveUp && !isMoving)
