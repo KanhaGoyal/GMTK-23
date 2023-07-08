@@ -29,25 +29,37 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(FollowingGhosts.Count <= 0) return;
+        //if(FollowingGhosts.Count <= 0) return;
 
-        if(Input.GetKeyDown(KeyCode.LeftArrow)) 
+        if(Input.GetKeyDown(KeyCode.LeftArrow)) leftKey.Play("ButtonPressed");
+        if(Input.GetKeyDown(KeyCode.DownArrow)) downKey.Play("ButtonPressed");
+        if(Input.GetKeyDown(KeyCode.UpArrow)) upKey.Play("ButtonPressed");
+        if(Input.GetKeyDown(KeyCode.RightArrow)) rightKey.Play("ButtonPressed");
+
+        if (Input.GetKeyUp(KeyCode.UpArrow))
         {
-            Debug.Log("Baiting an ally!");
-            FollowingGhosts[0].ChangeBehaviour(GhostBehaviour.AttackStraight, null, null, movement.lastFacedDirection);
-            FollowingGhosts.RemoveAt(0);
-            node.nodes.RemoveAt(0);
+            upKey.Play("ButtonReleased");
         }
-
-        if(Input.GetKeyDown(KeyCode.DownArrow)){
+        if (Input.GetKeyUp(KeyCode.DownArrow))
+        {
+            downKey.Play("ButtonReleased");
             Debug.Log("Camping mode on!");
             FollowingGhosts[0].ChangeBehaviour(GhostBehaviour.Camp, null, transform.position);
             FollowingGhosts.RemoveAt(0);
             node.nodes.RemoveAt(0);
         }
-         
-        if(Input.GetKeyDown(KeyCode.UpArrow)) leftKey.Play("ButtonPressed");
-        if(Input.GetKeyDown(KeyCode.RightArrow)) rightKey.Play("ButtonPressed");
+        if (Input.GetKeyUp(KeyCode.LeftArrow))
+        {
+            leftKey.Play("ButtonReleased");
+            Debug.Log("Baiting an ally!");
+            FollowingGhosts[0].ChangeBehaviour(GhostBehaviour.AttackStraight, null, null, movement.lastFacedDirection);
+            FollowingGhosts.RemoveAt(0);
+            node.nodes.RemoveAt(0);
+        }
+        if (Input.GetKeyUp(KeyCode.RightArrow))
+        {
+            rightKey.Play("ButtonReleased");
+        }
     }
 
     public void SpawnFollowerGhost(){

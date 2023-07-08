@@ -256,7 +256,7 @@ MonoBehaviour:
   turnWaitTime: 0.2
   groundLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 576
   playerDetectionRaycastDistance: 3
   playerRunSpeed: 4
   playerSearchTime: 3

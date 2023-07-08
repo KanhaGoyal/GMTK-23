@@ -40,7 +40,7 @@ public class GhostAI : MonoBehaviour
         seeker = GetComponent<Seeker>();
         aIPath = GetComponent<AIPath>();
 
-        Physics2D.IgnoreLayerCollision(7, 8); //Player and Follower Layer
+        Physics2D.IgnoreLayerCollision(7, 9); //Player and Follower Layer
         aIPath.maxSpeed = movementSpeed;
     }
 
