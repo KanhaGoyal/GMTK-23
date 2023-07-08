@@ -4,21 +4,15 @@ using UnityEngine;
 
 public class CommonOrbScript : MonoBehaviour
 {
-    /*private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.CompareTag("Player"))
-        {
-            AddGhost();
-            Destroy();
-        }
-
-        if(collision.CompareTag("Enemy"))
-        {
-            EnemyOrb();
-            Destroy();
+        if(collision.TryGetComponent<Player>(out Player player)){
+            player.SpawnFollowerGhost();
+            Destroy(gameObject);
         }
     }
 
+    /*
     private void EnemyOrb()
     {
         ghosts turn hollow;
