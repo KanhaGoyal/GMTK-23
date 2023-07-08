@@ -66,12 +66,10 @@ public class GridMovement : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-
-        nodeGenerator.previousPlayerPosition = origPos;
         nodeGenerator.CheckIfPlayerFlips(origPos, targetPos, direction);
         nodeGenerator.MoveNodes(targetPos);
-        transform.position = targetPos;
 
+        transform.position = targetPos;
         isMoving = false;
     }
 }
