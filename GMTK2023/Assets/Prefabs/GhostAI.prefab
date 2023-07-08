@@ -273,6 +273,7 @@ Transform:
   - {fileID: 4259676040388690827}
   - {fileID: 4259676039800599500}
   - {fileID: 5627327920342513121}
+  - {fileID: 1203898413215468705}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -386,7 +387,7 @@ MonoBehaviour:
   targetCompatibility: {fileID: 0}
   maxAcceleration: -2.5
   rotationSpeed: 360
-  slowdownDistance: 2
+  slowdownDistance: 1
   pickNextWaypointDist: 2
   endReachedDistance: 0.2
   alwaysDrawGizmos: 0
@@ -405,12 +406,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3c6618586650204d9440efa9f71cb74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
+  huntingSprite: {fileID: 374462560217316498, guid: e2ee7531923fc234589b5a3c87538240, type: 3}
+  huntedSprite: {fileID: -7320353602621188811, guid: e2ee7531923fc234589b5a3c87538240, type: 3}
+  isFacingRight: 0
   movementSpeed: 3
   myCurrentBehaviour: 0
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+  visionGameobject: {fileID: 4259676039800599500}
+  rayCastOrigin: {fileID: 1203898413215468705}
+  reconMoveSpeed: 1
+  raycastDistance: 1
+  changeDirectionTimer: 1.3
+  turnWaitTime: 0.3
+  reconVisionRadius: 6
   behaviourGizmo: {fileID: 8988614042551990473}
   gizmoDatas:
   - Behaviour: 2
@@ -521,3 +531,33 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!1 &6665471977062851867
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1203898413215468705}
+  m_Layer: 9
+  m_Name: Raycaster
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1203898413215468705
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6665471977062851867}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4259676041269020442}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}

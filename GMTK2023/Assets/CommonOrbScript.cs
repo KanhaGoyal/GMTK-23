@@ -6,8 +6,13 @@ public class CommonOrbScript : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.TryGetComponent<Player>(out Player player)){
+        if(collision.TryGetComponent<Player>(out Player player) && player.FollowingGhosts.Count < player.maxFollowerAmount){
             player.SpawnFollowerGhost();
+            Destroy(gameObject);
+        }
+
+        if(collision.TryGetComponent<EnemyAI>(out EnemyAI enemy)){
+            LevelManager.Instance.TurnTheCards(LevelState.BeingHunted);
             Destroy(gameObject);
         }
     }

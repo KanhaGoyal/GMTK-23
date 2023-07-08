@@ -6,6 +6,7 @@ TagManager:
   tags:
   - SnapTo
   - Vision
+  - Enemy
   layers:
   - Default
   - TransparentFX
