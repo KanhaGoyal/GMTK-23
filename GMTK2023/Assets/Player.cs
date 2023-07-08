@@ -29,9 +29,24 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.UpArrow)) upKey.Play("ButtonPressed");
-        if(Input.GetKeyDown(KeyCode.DownArrow)) downKey.Play("ButtonPressed");
-        if(Input.GetKeyDown(KeyCode.LeftArrow)) leftKey.Play("ButtonPressed");
+        if(FollowingGhosts.Count <= 0) return;
+
+        if(Input.GetKeyDown(KeyCode.LeftArrow)) 
+        {
+            Debug.Log("Baiting an ally!");
+            FollowingGhosts[0].ChangeBehaviour(GhostBehaviour.AttackStraight, null, null, movement.lastFacedDirection);
+            FollowingGhosts.RemoveAt(0);
+            node.nodes.RemoveAt(0);
+        }
+
+        if(Input.GetKeyDown(KeyCode.DownArrow)){
+            Debug.Log("Camping mode on!");
+            FollowingGhosts[0].ChangeBehaviour(GhostBehaviour.Camp, null, transform.position);
+            FollowingGhosts.RemoveAt(0);
+            node.nodes.RemoveAt(0);
+        }
+         
+        if(Input.GetKeyDown(KeyCode.UpArrow)) leftKey.Play("ButtonPressed");
         if(Input.GetKeyDown(KeyCode.RightArrow)) rightKey.Play("ButtonPressed");
     }
 
@@ -39,5 +54,7 @@ public class Player : MonoBehaviour
         node.CreateNewNode(movement.lastFacedDirection, movement.groundLayer);
         GhostAI follower = Instantiate(followerPrefab, node.nodes[node.nodes.Count - 1].position, Quaternion.identity);
         follower.ChangeBehaviour(GhostBehaviour.Follow, node.nodes[node.nodes.Count - 1]);
+        FollowingGhosts.Add(follower);
+        GhostBodies.Add(follower);
     }
 }
