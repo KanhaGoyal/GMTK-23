@@ -10,9 +10,8 @@ public class GridMovement : MonoBehaviour
 
     public Transform[] checkPositions;
     private bool canMoveUp, canMoveDown, canMoveLeft, canMoveRight;
-    private Vector2 lastFacedDirection;
+    [HideInInspector] public Vector2 lastFacedDirection;
     public LayerMask groundLayer;
-    public GameObject[] addedGhosts;
 
     NodeGenerator nodeGenerator;
 
@@ -59,6 +58,7 @@ public class GridMovement : MonoBehaviour
 
         origPos = transform.position;
         targetPos = origPos + direction;
+        nodeGenerator.MoveNodes(targetPos);
 
         while(elapsedTime < timeToMove)
         {
@@ -66,8 +66,6 @@ public class GridMovement : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-        nodeGenerator.CheckIfPlayerFlips(origPos, targetPos, direction);
-        nodeGenerator.MoveNodes(targetPos);
 
         transform.position = targetPos;
         isMoving = false;
