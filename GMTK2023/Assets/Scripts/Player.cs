@@ -88,9 +88,24 @@ public class Player : MonoBehaviour
         #endregion
     }
 
+    private void OnCollisionEnter2D(Collision2D other) {
+        if(other.gameObject.CompareTag("Enemy")){
+            if(IsHunter)
+            {
+                EnemyAI enemy;
+                other.gameObject.TryGetComponent<EnemyAI>(out enemy);
+                other.transform.parent.TryGetComponent<EnemyAI>(out enemy);
+                LevelManager.Instance.CheckForWin(enemy);
+                Destroy(other.gameObject);
+            } 
+            else Destroy(gameObject);
+        }
+    }
+
     public void SpawnFollowerGhost(){
         node.CreateNewNode(movement.lastFacedDirection, movement.groundLayer);
         GhostAI follower = Instantiate(followerPrefab, node.nodes[node.nodes.Count - 1].position, Quaternion.identity);
+        follower.SwitchMode(LevelManager.Instance.currentState);
         follower.ChangeBehaviour(GhostBehaviour.Follow, node.nodes[node.nodes.Count - 1]);
         FollowingGhosts.Add(follower);
         LevelManager.Instance.AllAnts.Add(follower);

@@ -5,7 +5,8 @@ using UnityEngine;
 public enum LevelState
 {
     BeingHunter,
-    BeingHunted
+    BeingHunted,
+    GameOver
 }
 
 public class LevelManager : MonoBehaviour
@@ -29,15 +30,11 @@ public class LevelManager : MonoBehaviour
     private void Start()
     {
         player = FindObjectOfType<Player>();
-
-        foreach (EnemyAI enemy in FindObjectsOfType<EnemyAI>())
-        {
-            Enemies.Add(enemy);
-        }
     }
 
     public void TurnTheCards(LevelState state)
     {
+        if(currentState == state) return;
         currentState = state;
 
         player.SwitchMode(state);
@@ -45,16 +42,36 @@ public class LevelManager : MonoBehaviour
         {
             ant.SwitchMode(state);
         }
+        
 
         switch (state)
         {
             case LevelState.BeingHunter:
                 //Add the code here
+                foreach (EnemyAI enemy in Enemies)
+                {
+                    enemy.OnStateChange(EnemyState.Patrol);
+                }
                 break;
 
             case LevelState.BeingHunted:
                 //Add the code here!
+                foreach (EnemyAI enemy in Enemies)
+                {
+                    enemy.OnStateChange(EnemyState.Hunter);
+                }
                 break;
+            
+            case LevelState.GameOver:
+                Debug.Log("YOU DIED!");
+                break;
+        }
+    }
+
+    public void CheckForWin(EnemyAI enemyDestroyed){
+        Enemies.Remove(enemyDestroyed);
+        if(Enemies.Count <= 0){
+            Debug.Log("Win!");
         }
     }
 }
