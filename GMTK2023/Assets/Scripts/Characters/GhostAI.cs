@@ -50,10 +50,11 @@ public class GhostAI : MonoBehaviour
 
     Vector2 attackLastPoint;
     float timer;
-
+    Transform graphics;
     private void Start()
     {
         aIPath = GetComponent<AIPath>();
+        graphics = GetComponentInChildren<SpriteRenderer>().transform;
 
         Physics2D.IgnoreLayerCollision(7, 9); //Player and Follower Layer
         aIPath.maxSpeed = movementSpeed;
@@ -70,8 +71,10 @@ public class GhostAI : MonoBehaviour
             if(aIPath.velocity.x < 0 && isFacingRight){
                 //moveleft!
                 Flip();
+                if(myCurrentBehaviour == GhostBehaviour.Follow) rayCastOrigin.localRotation = Quaternion.Euler(rayCastOrigin.localRotation.x, 180, rayCastOrigin.localRotation.x);
             }
             else if(aIPath.velocity.x > 0 && isFacingRight == false){
+                if(myCurrentBehaviour == GhostBehaviour.Follow) rayCastOrigin.localRotation = Quaternion.Euler(rayCastOrigin.localRotation.x, 0, rayCastOrigin.localRotation.x);
                 Flip();
             }
         }
@@ -79,9 +82,9 @@ public class GhostAI : MonoBehaviour
 
     void Flip(){
         isFacingRight = !isFacingRight;
-        Vector3 scale = transform.localScale;
+        Vector3 scale = graphics.localScale;
         scale.x *= -1;
-        transform.localScale = scale;
+        graphics.localScale = scale;
     }
 
     private void LateUpdate()
@@ -123,7 +126,7 @@ public class GhostAI : MonoBehaviour
 
     public void SwitchMode(LevelState state){
         if(state == LevelState.BeingHunted) GetComponentInChildren<SpriteRenderer>().sprite = huntedSprite;
-        else GetComponentInChildren<SpriteRenderer>().sprite = huntingSprite;
+        else if(state == LevelState.BeingHunter) GetComponentInChildren<SpriteRenderer>().sprite = huntingSprite;
     }
 
     public void ChangeBehaviour(GhostBehaviour behaviour, Transform followTarget = null, Vector2? campPosition = null, Vector2? attackDir = null)

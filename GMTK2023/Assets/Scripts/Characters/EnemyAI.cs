@@ -12,12 +12,14 @@ public enum EnemyState{
 
 public class EnemyAI : MonoBehaviour
 {
-    public Vector2 targetPosition;
+    private Vector2 targetPosition;
     private AIPath aiPath;
     private Seeker seeker;
 
+    public bool isFacingRight = true;
     public EnemyState myState;
     [Header("Roaming")]
+    public Transform raycastOrigin;
     public float roamSpeed;
     public float raycastDistance = 1f;
     public float changeDirectionTimer =1;
@@ -30,17 +32,30 @@ public class EnemyAI : MonoBehaviour
     public float playerSearchTime = 3f;
     public LayerMask playerLayer;
     public bool travelToOrb;
+
+    [Header("Hunting Mode")]
+    public float huntMoveSpeed = 5;
+    public Sprite huntingSprite, huntedSprite;
+    public float playerLostTime = 3;
+    public Transform nearestHuntTarget;
+
     private List<Vector2> powerupLocations = new List<Vector2>(); //Remember its location, if player is spotted then go to any nearest orb and pick it up!
 
     private float timer;
     private bool isTurning;
+    private Transform graphics;
+    
     private void Start()
     {
         // Set the initial target position
         targetPosition = transform.position;
+        graphics = GetComponentInChildren<SpriteRenderer>().transform;
 
         seeker = GetComponent<Seeker>();
         aiPath = GetComponent<AIPath>();
+
+        LevelManager.Instance.Enemies.Add(this);
+        
     }
 
 
@@ -49,15 +64,30 @@ public class EnemyAI : MonoBehaviour
         timer -= Time.deltaTime;
 
         if(myState != EnemyState.PlayerSighted){
-            if(Physics2D.Raycast(transform.position, transform.right, playerDetectionRaycastDistance, playerLayer)){
-                Debug.DrawRay(transform.position, transform.right * playerDetectionRaycastDistance);
-                OnStateChange(EnemyState.PlayerSighted);
+            if(Physics2D.Raycast(raycastOrigin.position, raycastOrigin.right, playerDetectionRaycastDistance, playerLayer)){
+                Debug.DrawRay(raycastOrigin.position, raycastOrigin.right * playerDetectionRaycastDistance);
+                if(myState != EnemyState.Hunter) OnStateChange(EnemyState.PlayerSighted);
             }
         }
 
-        if(travelToOrb) return;
+        if(aiPath.velocity.x < 0 && isFacingRight){
+                //moveleft!
+                Flip();
+            }
+            else if(aiPath.velocity.x > 0 && isFacingRight == false){
+                Flip();
+            }
+
+        if(travelToOrb || nearestHuntTarget != null) return;
 
         CheckForPossibleWay();
+    }
+
+    void Flip(){
+        isFacingRight = !isFacingRight;
+        Vector3 scale = graphics.localScale;
+        scale.x *= -1;
+        graphics.localScale = scale;
     }
 
     public void OnStateChange(EnemyState state){
@@ -66,6 +96,7 @@ public class EnemyAI : MonoBehaviour
         switch (state)
         {
             case EnemyState.Patrol:
+                GetComponentInChildren<SpriteRenderer>().sprite = huntedSprite;
                 targetPosition = transform.position;
                 aiPath.maxSpeed = roamSpeed;
                 travelToOrb = false;
@@ -73,11 +104,15 @@ public class EnemyAI : MonoBehaviour
             
             case EnemyState.PlayerSighted:
                 Debug.Log("Found my hunter, need to find to orb to start my HUNT");
-                GoToNearestOrb();
+                //GoToNearestOrb();
+                Perform180DegreeTurn();
+                aiPath.maxSpeed = playerRunSpeed;
                 Invoke(nameof(ReturnToPatrol), playerSearchTime);
                 break;
                 
             case EnemyState.Hunter:
+                GetComponentInChildren<SpriteRenderer>().sprite = huntingSprite;
+                aiPath.maxSpeed = huntMoveSpeed;
                 break;
         }
     }
@@ -112,13 +147,13 @@ public class EnemyAI : MonoBehaviour
 
     #region FreeRoam
     private void CheckForPossibleWay(){
-        bool hitForward = Physics2D.Raycast(transform.position, transform.right, raycastDistance, groundLayer);
-        bool hitUp = Physics2D.Raycast(transform.position, transform.up, raycastDistance, groundLayer);
-        bool hitDown = Physics2D.Raycast(transform.position, -transform.up, raycastDistance, groundLayer);
+        bool hitForward = Physics2D.Raycast(raycastOrigin.position, raycastOrigin.right, raycastDistance, groundLayer);
+        bool hitUp = Physics2D.Raycast(raycastOrigin.position, raycastOrigin.up, raycastDistance, groundLayer);
+        bool hitDown = Physics2D.Raycast(raycastOrigin.position, -raycastOrigin.up, raycastDistance, groundLayer);
 
-        Debug.DrawRay(transform.position, transform.right);
-        Debug.DrawRay(transform.position, transform.up);
-        Debug.DrawRay(transform.position, -transform.up);
+        Debug.DrawRay(raycastOrigin.position, raycastOrigin.right);
+        Debug.DrawRay(raycastOrigin.position, raycastOrigin.up);
+        Debug.DrawRay(raycastOrigin.position, -raycastOrigin.up);
 
         if (hitForward && hitUp && hitDown)
         {
@@ -144,7 +179,7 @@ public class EnemyAI : MonoBehaviour
                 bool turnRight = Random.value < 0.3f;
                 if(turnRight){
                     Debug.Log("Turning Down");
-                    transform.Rotate(0, 0, -90f);
+                    raycastOrigin.Rotate(0, 0, -90f);
                     StopMoving();
                 } 
             }
@@ -154,7 +189,7 @@ public class EnemyAI : MonoBehaviour
                 if(turnLeft){
                     Debug.Log("Turning Up");
 
-                    transform.Rotate(0, 0, 90f);
+                    raycastOrigin.Rotate(0, 0, 90f);
                     StopMoving();
                 }
             }
@@ -171,13 +206,13 @@ public class EnemyAI : MonoBehaviour
      private void MoveForward()
     {
         // Calculate the target position in front of the player
-        targetPosition = (Vector2)transform.position + (Vector2)transform.right * raycastDistance;
+        targetPosition = (Vector2)raycastOrigin.position + (Vector2)raycastOrigin.right * raycastDistance;
         aiPath.destination = targetPosition;
     }
 
     private void Perform180DegreeTurn()
     {
-        transform.Rotate(0f, 180f, 0);
+        raycastOrigin.Rotate(0f, 180f, 0);
         StopMoving();
         MoveForward();
     }
@@ -188,7 +223,7 @@ public class EnemyAI : MonoBehaviour
         bool turnRight = Random.value < 0.5f;
 
         // Perform the turn by rotating 90 degrees in the chosen direction
-        transform.Rotate(0f, 0f, turnRight ? -90f : 90f);
+        raycastOrigin.Rotate(0f, 0f, turnRight ? -90f : 90f);
         StopMoving();
     }
 
@@ -207,5 +242,25 @@ public class EnemyAI : MonoBehaviour
         if(other.TryGetComponent<CommonOrbScript>(out CommonOrbScript orb)){
             powerupLocations.Add(orb.transform.position);
         }
+
+        if(myState == EnemyState.Hunter && other.CompareTag("Player") && nearestHuntTarget == null){
+            Debug.Log("found You!");
+            nearestHuntTarget = other.transform;
+            StopCoroutine(MoveToPlayer());
+            StartCoroutine(MoveToPlayer());
+        }
+    }
+
+    IEnumerator MoveToPlayer(){
+        float elapsedTime =0;
+
+        while (elapsedTime < playerLostTime)
+        {
+            aiPath.destination = nearestHuntTarget.position;
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        nearestHuntTarget = null;
     }
 }
